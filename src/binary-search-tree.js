@@ -15,31 +15,111 @@ class BinarySearchTree {
     return this.searchTree
   }
 
-  add(data) {}
+  add(data) {
+    this.searchTree = addItem(this.searchTree, data)
 
-  has(/* data */) {
-    throw new NotImplementedError('Not implemented')
-    // remove line with error and write your code here
+    function addItem(node, data) {
+      if (!node) {
+        return new Node(data)
+      }
+
+      if (node.data === data) {
+        return node
+      }
+
+      if (data < node.data) {
+        node.left = addItem(node.left, data)
+      } else {
+        node.right = addItem(node.right, data)
+      }
+
+      return node
+    }
   }
 
-  find(/* data */) {
-    throw new NotImplementedError('Not implemented')
-    // remove line with error and write your code here
+  has(data) {
+    return searchItem(this.searchTree, data)
+
+    function searchItem(node, data) {
+      if (!node) return false
+
+      if (node.data === data) return true
+
+      return data < node.data ? searchItem(node.left, data) : searchItem(node.right, data)
+    }
   }
 
-  remove(/* data */) {
-    throw new NotImplementedError('Not implemented')
-    // remove line with error and write your code here
+  find(data) {
+    return findItem(this.searchTree, data)
+
+    function findItem(node, data) {
+      if (!node) return null
+
+      if (node.data === data) return node
+
+      return data < node.data ? findItem(node.left, data) : findItem(node.right, data)
+    }
+  }
+
+  remove(data) {
+    this.searchTree = remuveItem(this.searchTree, data)
+
+    function remuveItem(node, data) {
+      if (!node) return null
+
+      if (data < node.data) {
+        node.left = remuveItem(node.left, data)
+        return node
+      } else if (data > node.data) {
+        node.right = remuveItem(node.right, data)
+        return node
+      } else {
+        if (!node.left && !node.right) {
+          return null
+        }
+
+        if (!node.left) {
+          node = node.right
+          return node
+        }
+
+        if (!node.right) {
+          node = node.left
+          return node
+        }
+
+        let maxLeft = node.left
+        while (maxLeft.right) {
+          maxLeft = maxLeft.right
+        }
+
+        node.data = maxLeft.data
+
+        node.left = remuveItem(node.left, maxLeft.data)
+
+        return node
+      }
+    }
   }
 
   min() {
-    throw new NotImplementedError('Not implemented')
-    // remove line with error and write your code here
+    return findMin(this.searchTree)
+
+    function findMin(node) {
+      if (!node) return null
+
+      return node.left ? findMin(node.left) : node.data
+    }
   }
 
   max() {
-    throw new NotImplementedError('Not implemented')
-    // remove line with error and write your code here
+    return findMax(this.searchTree)
+
+    function findMax(node) {
+      if (!node) return null
+
+      return node.right ? findMax(node.right) : node.data
+    }
   }
 }
 
